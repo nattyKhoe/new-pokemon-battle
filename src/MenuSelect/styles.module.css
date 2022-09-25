@@ -1,0 +1,23 @@
+
+.container {
+    background-color: white;
+    width: 220px;
+    height: 250px;
+    margin: 5px;
+    display: inline-block;
+    align-items: center;
+    justify-content: center;
+    display: flex;
+}
+
+.image{
+    height: 50px;
+    align-items: center;
+    justify-content: center;
+    display: flex;
+}
+.h1{
+    align-items: center;
+    justify-content: center;
+    display: flex;
+ }
