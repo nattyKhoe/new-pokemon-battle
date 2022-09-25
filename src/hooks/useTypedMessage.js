@@ -1,10 +1,9 @@
 export const useTypedMessage = (msg) => {
-    constructor (){
-        this.state = {
-            typedMessage:""
-        }
-    }
+    this.state = {
+        typedMessage:""
+    };
 
-    return this.state.typedMessage
+    
+    return this.state.typedMessage;
 
-}
+};
