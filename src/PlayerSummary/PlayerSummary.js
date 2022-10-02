@@ -5,22 +5,38 @@ import HealthBar from '../HealthBar/HealthBar';
 const red = "#821200";
 const blue = "#1953cb";
 
-export default class PlayerSummary extends React.Component {
-    // constructor (props){
-    //     super(props);
-    // }
-
-    render () {
-        return (<div
-        style={{backgroundColor: this.props.player ? red :blue}}
+const PlayerSummary = ({player, pokemon, health}) => {
+    return (<div
+        style={{backgroundColor: player ? red :blue}}
         className = {styles.main}>
             <div className={styles.info}>
-                <div className={styles.name}>{this.props.pokemon.name.toUpperCase()}</div>
+                <div className={styles.name}>{pokemon.name}</div>
             </div>
 
             <div className={styles.health}>
-                <HealthBar label="HP" health= {this.props.pokemon.health} maxHealth={this.props.pokemon.maxHp}/>
+                <HealthBar label="HP" health= {health} maxHealth={pokemon.maxHp}/>
             </div>
-        </div>)
-   }
+        </div>);
 }
+
+export default PlayerSummary;
+
+// export default class PlayerSummary extends React.Component {
+//     // constructor (props){
+//     //     super(props);
+//     // }
+
+//     render () {
+//         return (<div
+//         style={{backgroundColor: this.props.player ? red :blue}}
+//         className = {styles.main}>
+//             <div className={styles.info}>
+//                 <div className={styles.name}>{this.props.pokemon.name.toUpperCase()}</div>
+//             </div>
+
+//             <div className={styles.health}>
+//                 <HealthBar label="HP" health= {this.props.pokemon.health} maxHealth={this.props.pokemon.maxHp}/>
+//             </div>
+//         </div>)
+//    }
+// }

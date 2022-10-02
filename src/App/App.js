@@ -1,68 +1,119 @@
 import styles from './styles.module.css';
-import React from 'react';
+import React, { useState } from 'react';
+import { wait } from '../hooks/wait';
 
 import Start from '../MenuStart/Start';
 import SelectPokemons from '../MenuSelect/SelectPokemons';
 import Battle from '../MenuBattle/battle';
+import Loading from '../Loading/Loading';
 
 import { fetchingPokemonTeam } from '../functions/AppFunctions';
 
-class App extends React.Component {
-  constructor(){
-    super()
-    this.state = {
-      mode: "start",
-      username: "",
-      player:[],
-      opponent:[],
-    }
-  };
 
-  onStartClick = (name) => {
-    this.setState({
-      mode: "select",
-      username: name
-    })
+function App () {
+  
+  const [mode, setMode] = useState('start');
+  const [username, setUsername] = useState('');
+  const [player, setPlayer] = useState('');
+  const [opponent, setOpponent] = useState ('');
+
+  const onStartClick = (name) => {
+    setMode('select');
+    setUsername(name);
   }
 
-  onSelectClick = (pokemons) => {
+  const onSelectClick = async (pokemons) => {
     if (pokemons.length === 3){
-      this.setState({
-        mode:"battle",
-        player: fetchingPokemonTeam ("player", pokemons),
-        opponent:fetchingPokemonTeam ("opponent", pokemons),
-        isLoaded: true
-      });
-    } else {
-      console.log("Please select three Pokemons")
-    }
+      setPlayer(fetchingPokemonTeam("player", pokemons));
+      setOpponent(fetchingPokemonTeam ("opponent", pokemons));
+      setMode('loading');
+      await wait (3000);
+      setMode('battle');
+    } 
   }
 
-  onBattleClick =() => {
-    this.setState({mode:"end"})
+  const onBattleClick =() => {
+    setMode('end')
   }
 
-  onEndClick = () => {
-    this.setState( {
-      mode: "start",
-      username: "",
-      selectedPokemons: []
-    })
+  const onEndClick = () => {
+    setMode('start');
+    setUsername('');
+    setPlayer('');
+    setOpponent('');
   }
-  render(){
+
   return (
     <div className={styles.main}>
       
-      {this.state.mode === "start" && (<Start onStartClick={this.onStartClick}/>)}
+      {mode === "start" && (<Start onStartClick={onStartClick}/>)}
 
-      {this.state.mode === "select" && (<SelectPokemons username={this.state.username} onSelectClick={this.onSelectClick}/>)}
-      {/* {this.state.mode === "battle" && console.log(this.state)} */}
+      {console.log (mode, username)}
+
+      {mode === "select" && (<SelectPokemons username={username} onSelectClick={onSelectClick}/>)}
+
+      {mode === "loading" && (<Loading/>)}
       
-      {this.state.mode === "battle" && this.state.isLoaded && (<Battle onBattleClick={this.onBattleClick} player={this.state.player} opponent={this.state.opponent}/>)}
+      {mode === "battle" && (<Battle onBattleClick={onBattleClick} player={player} opponent={opponent}/>)}
      
     </div>
   );
   };
-}
+// class App extends React.Component {
+//   constructor(){
+//     super()
+//     this.state = {
+//       mode: "start",
+//       username: "",
+//       player:[],
+//       opponent:[],
+//     }
+//   };
+
+//   onStartClick = (name) => {
+//     this.setState({
+//       mode: "select",
+//       username: name
+//     })
+//   }
+
+//   onSelectClick = (pokemons) => {
+//     if (pokemons.length === 3){
+//       this.setState({
+//         mode:"battle",
+//         player: fetchingPokemonTeam ("player", pokemons),
+//         opponent:fetchingPokemonTeam ("opponent", pokemons)
+//       });
+//     } else {
+//       console.log("Please select three Pokemons")
+//     }
+//   }
+
+//   onBattleClick =() => {
+//     this.setState({mode:"end"})
+//   }
+
+//   onEndClick = () => {
+//     this.setState( {
+//       mode: "start",
+//       username: "",
+//       selectedPokemons: []
+//     })
+//   }
+//   render(){
+//   return (
+//     <div className={styles.main}>
+      
+//       {this.state.mode === "start" && (<Start onStartClick={this.onStartClick}/>)}
+
+//       {this.state.mode === "select" && (<SelectPokemons username={this.state.username} onSelectClick={this.onSelectClick}/>)}
+//       {/* {this.state.mode === "battle" && console.log(this.state)} */}
+      
+//       {this.state.mode === "battle" && (<Battle onBattleClick={this.onBattleClick} player={this.state.player} opponent={this.state.opponent}/>)}
+     
+//     </div>
+//   );
+//   };
+// }
 
 export default App;

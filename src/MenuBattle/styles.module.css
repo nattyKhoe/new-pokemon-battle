@@ -2,7 +2,7 @@
 
 .player,
 .opponent {
-  gap: 10px;
+  gap: 10px; 
   display: flex;
   flex-direction: column;
   width: 100%;
@@ -46,8 +46,7 @@
 }
 
 .characters .gameImages img {
-  max-height: 25vh;
-  min-height: 150px;
+  min-height: 40vh;
 }
 
 .static {
@@ -57,24 +56,25 @@
 }
 
 .playerSprite .attack {
-  transition: 0.1s;
+  transition: 0.2s;
   transform: translateX(100px);
 }
 .opponentSprite .attack {
-  transition: 0.1s;
+  transition: 0.2s;
   transform: translateX(-100px);
 }
 
-.magic {
-  transition: 0.2s;
+.specialAttack {
+  transition: 0.4s;
   transform: translateY(-25px);
-  animation: shake 0.5s infinite;
+  animation: shake 1s infinite;
 }
 
 .damage {
   opacity: 1;
-  animation: flash 0.3s 0.3s infinite;
+  animation: flash 0.6s 0.6s infinite;
 }
+
 
 @keyframes shake {
   0% {

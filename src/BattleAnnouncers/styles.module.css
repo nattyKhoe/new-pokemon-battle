@@ -1,3 +1,5 @@
+@import url('https://fonts.googleapis.com/css2?family=Press+Start+2P&display=swap');
+
 .main {
   height: 100%;
   padding: 25px;
@@ -13,6 +15,18 @@
   background-color: #1953cb;
 }
 .message {
+  font-family: 'Press Start 2P', cursive;
   text-align: center;
   font-size: 32px;
+}
+
+.cursor {
+  border-left: 0.1em solid white;
+  animation: blink 1s steps(1) infinite;
+}
+
+@keyframes blink {
+  50% {
+    border-color: transparent;
+  }
 }

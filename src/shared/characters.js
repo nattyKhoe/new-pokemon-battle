@@ -12,52 +12,63 @@ import voltorbImg from '../assets/Voltorb.png'
 const bulbasaur ={
     name: "bulbasaur",
     url: bulbasaurImg,
+    element: "grass",
 }
 
 const clefairy = {
     name:"clefairy",
     url: clefairyImg,
+    element: "normal"
 };
 
 const charmander ={
     name:"charmander",
     url: charmanderImg,
+    element:"fire"
 }
 
 const eevee ={
     name:"eevee",
     url: eeveeImg,
+    element: "normal"
 }
 
 const growlithe ={
     name:"growlithe",
     url: growlitheImg,
+    element:"fire"
 }
 
 const horsea ={
     name:"horsea",
     url: horseaImg,
+    element:"water"
 }
 
 const pikachu ={
     name:"pikachu",
     url: pikachuImg,
+    element:"electric"
 }
 
 const squirtle ={
     name:"squirtle",
-    url: squirtleImg
+    url: squirtleImg,
+    element:"water"
 }
 
 const tangela ={
     name:"tangela",
     url: tangelaImg,
+    element:"grass"
 }
 
 const voltorb ={
     name:"voltorb",
     url: voltorbImg,
+    element:"electric"
 }
+
 const pokemons = [bulbasaur, clefairy, charmander, eevee, growlithe, horsea, pikachu, squirtle, tangela, voltorb];
 
 export default pokemons;

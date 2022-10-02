@@ -10,6 +10,7 @@ export default class ChoiceMenu extends React.Component {
         return(
             <div className={styles.main}>
                 <div onClick={this.props.onAttack} className={styles.option}>Attack</div>
+                <div disabled={this.props.SpecialAttack} onClick={this.props.onSpecialAttack} className={styles.option}>Special Attack</div>
                 <div onClick={this.props.onSwitch} className={styles.option}>Swap</div>
             </div>
         )
