@@ -5,16 +5,16 @@ import HealthBar from '../HealthBar/HealthBar';
 const red = "#821200";
 const blue = "#1953cb";
 
-const PlayerSummary = ({player, pokemon, health}) => {
+const PlayerSummary = ({player, name, maxHp, health}) => {
     return (<div
         style={{backgroundColor: player ? red :blue}}
         className = {styles.main}>
             <div className={styles.info}>
-                <div className={styles.name}>{pokemon.name}</div>
+                <div className={styles.name}>{name}</div>
             </div>
 
             <div className={styles.health}>
-                <HealthBar label="HP" health= {health} maxHealth={pokemon.maxHp}/>
+                <HealthBar label="HP" health= {health} maxHealth={maxHp}/>
             </div>
         </div>);
 }

@@ -1,4 +1,3 @@
-
 import { electric, element, fire, grass, normal, water } from "../shared/elements";
 
 export const getPokemonElement = (pokemon) => {
@@ -26,11 +25,11 @@ export const attack = ( attacker,defender ) => {
     const defMultiplier = defender.damage[attacker.element];
 
     const finalDamage = attacker.attack*attMultiplier - defender.defense*defMultiplier;
-
-    if (finalDamage > 0) {
-        return finalDamage;
+    
+    if (finalDamage < 0) {
+        return 0
     } else {
-        return 0;
+        return finalDamage;
     }
 }
 
@@ -40,9 +39,9 @@ export const specialAttack = ( attacker,defender ) => {
 
     const finalDamage = attacker.specialAttack*attMultiplier - defender.specialDefense*defMultiplier;
 
-    if (finalDamage > 0) {
-        return finalDamage;
+    if (finalDamage < 0) {
+        return 0
     } else {
-        return 0;
+        return finalDamage;
     }
 }

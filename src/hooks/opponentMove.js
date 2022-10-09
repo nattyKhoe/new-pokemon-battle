@@ -3,7 +3,7 @@ import { useEffect, useState } from "react";
 
 export const opponentMove = (turn) => {
 
-    const [aiChoice, setAIChoice] = useState ('')
+    const [aiChoice, setAIChoice] = useState ('');
 
     useEffect(()=>{
         if (turn === 1){

@@ -1,6 +1,7 @@
+@import url('https://fonts.googleapis.com/css2?family=Press+Start+2P&display=swap');
 .main {
-  width: 500px;
-  height: 150px;
+  width: 100vh;
+  height: 10vh;
   border-radius: 10px;
   box-shadow: 0px 0px 3px black;
 
@@ -21,5 +22,6 @@
 
 .name,
 .level {
-  font-size: 32px;
+  font-family: 'Press Start 2P', cursive;
+  font-size: 2vh;
 }

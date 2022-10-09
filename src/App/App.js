@@ -6,19 +6,21 @@ import Start from '../MenuStart/Start';
 import SelectPokemons from '../MenuSelect/SelectPokemons';
 import Battle from '../MenuBattle/battle';
 import Loading from '../Loading/Loading';
+import End from '../MenuEnd/end';
 
 import { fetchingPokemonTeam } from '../functions/AppFunctions';
 
 
 function App () {
   
-  const [mode, setMode] = useState('start');
+  const [winner, setWinner] = useState('');
+  const [appMode, setAppMode] = useState('start');
   const [username, setUsername] = useState('');
-  const [player, setPlayer] = useState('');
-  const [opponent, setOpponent] = useState ('');
+  const [player, setPlayer] = useState([]);
+  const [opponent, setOpponent] = useState ([]);
 
   const onStartClick = (name) => {
-    setMode('select');
+    setAppMode('select');
     setUsername(name);
   }
 
@@ -26,18 +28,19 @@ function App () {
     if (pokemons.length === 3){
       setPlayer(fetchingPokemonTeam("player", pokemons));
       setOpponent(fetchingPokemonTeam ("opponent", pokemons));
-      setMode('loading');
+      setAppMode('loading');
       await wait (3000);
-      setMode('battle');
+      setAppMode('battle');
     } 
   }
 
-  const onBattleClick =() => {
-    setMode('end')
+  const onBattleEnd =(winner) => {
+    setAppMode('end');
+    setWinner(winner);
   }
 
   const onEndClick = () => {
-    setMode('start');
+    setAppMode('start');
     setUsername('');
     setPlayer('');
     setOpponent('');
@@ -46,16 +49,15 @@ function App () {
   return (
     <div className={styles.main}>
       
-      {mode === "start" && (<Start onStartClick={onStartClick}/>)}
+      {appMode === "start" && (<Start onStartClick={onStartClick}/>)}
 
-      {console.log (mode, username)}
+      {appMode === "select" && (<SelectPokemons username={username} onSelectClick={onSelectClick}/>)}
 
-      {mode === "select" && (<SelectPokemons username={username} onSelectClick={onSelectClick}/>)}
-
-      {mode === "loading" && (<Loading/>)}
+      {appMode === "loading" && (<Loading/>)}
       
-      {mode === "battle" && (<Battle onBattleClick={onBattleClick} player={player} opponent={opponent}/>)}
-     
+      {appMode === "battle" && (<Battle onBattleEnd={onBattleEnd} player={player} opponent={opponent}/>)}
+
+      {/* {appMode === "end" && (<End winner={winner==="player" ? username : "opponent"} onEndClick={onEndClick}/>)} */}
     </div>
   );
   };

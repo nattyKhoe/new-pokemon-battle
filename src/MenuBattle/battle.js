@@ -6,16 +6,14 @@ import styles from './styles.module.css';
 import PlayerSummary from '../PlayerSummary/PlayerSummary';
 import ChoiceMenu from '../ChoiceMenu/ChoiceMenu';
 import BattleAnnouncer from '../BattleAnnouncers/BattleAnnouncers';
-import { getPokemonDamage, getPokemonElement } from '../functions/BattleFunctions';
 import { useBattleSequence } from '../hooks/useBattleSequence';
 import { opponentMove } from '../hooks/opponentMove';
 // import { wait } from '../hooks/wait';
 
 
-const Battle = ({onBattleClick, player, opponent}) => {
+const Battle = ({onBattleEnd, player, opponent}) => {
   // const [isLoaded, setIsLoaded] = useState(false);
-  const [playerTeam, setPlayerTeam] = useState (player);
-  const [opponentTeam, setOpponentTeam] = useState (opponent);
+ 
   // const [currentPlayer,setCurrentPlayer] = useState ({
   //   name: "pikachu",
   //   spriteBack: pokemons[6].url,
@@ -45,17 +43,8 @@ const Battle = ({onBattleClick, player, opponent}) => {
   //   element: getPokemonElement("clefairy"),
   //   damage: getPokemonDamage("clefairy")
   // })
-  const [currentOpponent,setCurrentOpponent] = useState ({
-    ... opponent[0],
-    element: getPokemonElement(opponent[0].name),
-    damage: getPokemonDamage(opponent[0].name)
-  });
-  const [currentPlayer, setCurrentPlayer] = useState ({
-    ... player[0],
-    element: getPokemonElement(player[0].name),
-    damage: getPokemonDamage(player[0].name)
-  });
-  const [specialAttack, setSpecialAttack] = useState(false);
+  
+  // const [specialAttack, setSpecialAttack] = useState(false);
   const [sequence, setSequence] = useState ({});
 
   const { turn,
@@ -64,12 +53,11 @@ const Battle = ({onBattleClick, player, opponent}) => {
     opponentHealth,
     announcerMessage,
     playerAnimation,
-    opponentAnimation
-  } = useBattleSequence(sequence, currentPlayer, currentOpponent, player, opponent);
-
-  console.log(currentPlayer)
- 
- 
+    opponentAnimation,
+    currentPlayer,
+    currentOpponent,
+    winner
+  } = useBattleSequence(sequence, player, opponent);
 
   const aiChoice = opponentMove(turn);
 
@@ -79,25 +67,18 @@ const Battle = ({onBattleClick, player, opponent}) => {
     }
   },[turn, aiChoice, inSeq])
 
-  
+  // useEffect(()=>{
+  //   onBattleEnd(winner);
+  //   }
+  // , [winner, onBattleEnd]);
 
-  const activateSpecialAttack = () => {
-    let n = Math.random() * 10;
-    if (n > 8) {
-        setSpecialAttack(true);
-    }
-    console.log(n)
-  }
-
-  const onSpecialAttack = () =>{
-    console.log('specialAttack');
-    setSpecialAttack(false);
-    setSequence({turn, mode:'specialAttack'})
-  }
-
-    console.log(currentPlayer)
     return(
     <React.Fragment>
+      <div className={styles.opponent}>
+        <div className={styles.summary}>
+          <PlayerSummary player={false} name={currentOpponent.name} maxHp={currentOpponent.maxHp} health={opponentHealth}/>
+        </div>
+      </div>
       <div className={styles.characters}>
         <div className={styles.gameHeader}>
           {currentPlayer.name} vs {currentOpponent.name}
@@ -119,16 +100,10 @@ const Battle = ({onBattleClick, player, opponent}) => {
           </div>
         </div>
       </div>
-
-      <div className={styles.opponent}>
-        <div className={styles.summary}>
-          <PlayerSummary player={false} pokemon={currentOpponent} health={opponentHealth}/>
-        </div>
-      </div>
       
       <div className={styles.player}>
         <div className={styles.summary}>
-          <PlayerSummary player={true} pokemon={currentPlayer} health={playerHealth}/>
+          <PlayerSummary player={true} name={currentPlayer.name} maxHp={currentPlayer.maxHp} health={playerHealth}/>
         </div>
 
         <div className={styles.hud}>
@@ -139,123 +114,14 @@ const Battle = ({onBattleClick, player, opponent}) => {
           <div className={styles.hudChild}>
             <ChoiceMenu
             onAttack={()=>setSequence({turn, mode:'attack'})}
-            onSwitch={()=>console.log("Switch")}
-            onSpecialAttack={onSpecialAttack}
+            onSwitch={()=>setSequence({turn, mode:'swap'})}
+            onSpecialAttack={() =>setSequence({turn, mode:'specialAttack'})}
             />
           </div>
         </div>
       </div>
-  
-    <button onClick={onBattleClick}>End</button>
     </React.Fragment>  
     );
 };
 
 export default Battle;
-// export default class Battle extends React.Component{
-//   constructor(props){
-//     super(props);
-//     this.state = {
-//       isLoaded: false,
-//       player: {},
-//       opponent: {},
-//       specialAttack:false
-//     }
-//   }
-//   componentDidMount(){
-//     setTimeout(()=>this.setState({
-//       isLoaded: true,
-//       currentPlayer:{...this.props.player[0],
-//         element: getPokemonElement(this.props.player[0].name),
-//         damage: getPokemonDamage(this.props.player[0].name)
-//       },
-//       currentOpponent:{...this.props.opponent[0],
-//         element: getPokemonElement(this.props.opponent[0].name),
-//         damage: getPokemonDamage(this.props.opponent[0].name)
-//       }
-//     }), 3000);
-//   }
-
-//   activateSpecialAttack = () => {
-//     let n = Math.random() * 10;
-//     if (n > 8) {
-//       this.setState({
-//         specialAttack:true
-//       })
-//     }
-//     console.log(n)
-//   }
-
-//   onSpecialAttack = () =>{
-//     console.log('specialAttack');
-//     this.setState({
-//       specialAttack:false
-//     })
-//   }
-
-//   render() {
-//     this.activateSpecialAttack();
-//     if (this.state.isLoaded){
-//       console.log(this.state.currentPlayer);
-//     return(
-//     <React.Fragment>
-//       <div className={styles.characters}>
-//         <div className={styles.gameHeader}>
-//           {this.state.currentPlayer.name} vs {this.state.currentOpponent.name}
-//         </div>
-//         <div className={styles.gameImages}>
-//           <div className={styles.playerSprite}>
-//             <img
-//             src={this.state.currentPlayer.spriteBack}
-//             alt={this.state.currentPlayer.name}
-//             // className={styles.}
-//             />
-//           </div>
-//           <div className={styles.opponentSprite}>
-//           <img
-//             src={this.state.currentOpponent.spriteFront}
-//             alt={this.state.currentOpponent.name}
-//             // className={styles.}
-//             />
-//           </div>
-//         </div>
-//       </div>
-
-//       <div className={styles.opponent}>
-//         <div className={styles.summary}>
-//           <PlayerSummary player={false} pokemon={this.state.currentOpponent} />
-//         </div>
-//       </div>
-      
-//       <div className={styles.player}>
-//         <div className={styles.summary}>
-//           <PlayerSummary player={true} pokemon={this.state.currentPlayer} />
-//         </div>
-
-//         <div className={styles.hud}>
-
-//           <div className={styles.hudChild}>
-//             <BattleAnnouncer message={`What will you do?`} />
-//           </div>
-//           <div className={styles.hudChild}>
-//             <ChoiceMenu
-//             onAttack={()=>console.log("Attack")}
-//             onSwitch={()=>console.log("Switch")}
-//             onSpecialAttack={this.specialAttack}
-//             />
-//           </div>
-//         </div>
-//       </div>
-  
-//     <button onClick={this.props.onBattleClick}>End</button>
-//     </React.Fragment>  
-//     );
-//     } else {
-//       return (
-//       <div>
-//       <img className={styles.loading} src={loading} alt="Loading" />  
-//       </div>
-//       );  
-//   }
-// };
-// }

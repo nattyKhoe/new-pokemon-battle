@@ -11,9 +11,8 @@ const BattleAnnouncer = ({message}) => {
         
         if (message.length){
             (async()=>{
-                let visMessage = '';
                 for (let i = 0; i <= message.length; i++){
-                    await wait (200);
+                    await wait (100);
                     setTypedMessage(message.substring(0,i));
                 }
             }) ();

@@ -9,7 +9,7 @@ const SelectPokemons = ( {username, onSelectClick}) => {
     const [tempSelections,setTempSelections] = useState ([])
 
     const addNewPokemon = (name) => {
-        let team = [... tempSelections];
+        let team = [...tempSelections];
         team.push(name);
         setTempSelections(team);
     }
