@@ -31,3 +31,7 @@
 .option:hover {
   background-color: #fd9401;
 }
+
+.deactivate {
+  visibility: hidden;
+}

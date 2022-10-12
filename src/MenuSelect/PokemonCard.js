@@ -20,7 +20,15 @@ const PokemonCard = ({addNewPokemon, removePokemon, tempSelections, pokemon}) =>
     };
 
     return(
-        <div className={isSelected?styles.selected:styles.container} onClick={onSelectingPokemons}>
+        <div className={
+            isSelected
+            ?styles.selected
+            :tempSelections.length === 3
+            ?styles.max
+            :styles.container
+
+        }
+            onClick={onSelectingPokemons}>
             <h3 className={styles.h1}>{pokemon.name}</h3>
             <img className={styles.image} src={pokemon.url} alt={pokemon.name}/>
             {isSelected ? (<h2 className={styles.h1}>✔</h2>) : null}

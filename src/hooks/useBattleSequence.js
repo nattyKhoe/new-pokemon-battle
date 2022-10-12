@@ -21,6 +21,20 @@ export function useBattleSequence (sequence, player, opponent) {
     const [playerAnimation, setPlayerAnimation] = useState('');
     const [opponentAnimation, setOpponentAnimation] = useState('');
     
+    const pokemonZero = {
+        attack: 55, 
+        damage: {normal: 1, fire: 1, water: 1, grass: 1, electric: 1},
+        defense: 50,
+        element: "normal",
+        health: 55,
+        maxHp: 55,
+        name: "eevee",
+        specialAttack:45,
+        specialDefense: 65,
+        spriteBack: "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/back/133.png",
+        spriteFront: "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/133.png"
+    } 
+    
     const swapPokemon = (pokemonTeam, swappedPokemon) =>{
         let team = pokemonTeam.filter((pokemon)=>pokemon.name !== swappedPokemon.name);
         let dispatched = [];
@@ -29,7 +43,7 @@ export function useBattleSequence (sequence, player, opponent) {
             dispatched = swappedPokemon;
         }
         if (pokemonTeam.length === 2){
-            dispatched = team;
+            dispatched = team[0];
         };
         if (pokemonTeam.length === 3){
             let n = Math.floor(Math.random()*10) % 2;
@@ -41,29 +55,39 @@ export function useBattleSequence (sequence, player, opponent) {
 
 
     const swapOpponent = async(attacker) =>{
-        let tempCurrent = {... currentOpponent};
-        tempCurrent.health = opponentHealth; //updating the health
-        let tempTeam = opponentTeam.filter((pokemon)=>pokemon.name!==currentOpponent.name).concat(tempCurrent);
-        setCurrentOpponent(swapPokemon(opponentTeam, attacker));
-        setOpponentTeam(tempTeam);
-        await wait (3000);
-        setPlayerHealth(currentOpponent.health);
-        console.log(opponentTeam);
+        if (opponentTeam.length > 1){
+            let tempCurrent = {... currentOpponent};
+            tempCurrent.health = opponentHealth; //updating the health
+            let tempTeam = opponentTeam.filter((pokemon)=>pokemon.name!==currentOpponent.name).concat(tempCurrent);
+            let temp = swapPokemon(opponentTeam, attacker);
+            setCurrentOpponent(temp);
+            setOpponentTeam(tempTeam);
+            await wait (3000);
+            setOpponentHealth(currentOpponent.health);
+
+        }
+
     };
 
     const swapPlayer = async(attacker) =>{
-        let tempCurrent = {...currentPlayer};
-        tempCurrent.health = playerHealth;
-        let tempTeam = playerTeam.filter((pokemon)=>pokemon.name!== currentPlayer.name).concat(tempCurrent);
-        setCurrentPlayer(swapPokemon(playerTeam, attacker));
-        setPlayerTeam(tempTeam);
-        await wait (3000);
-        setPlayerHealth(currentPlayer.health);
-        console.log(playerTeam);
+        if (playerTeam.length > 1) {
+            let tempCurrent = {...currentPlayer};
+            tempCurrent.health = playerHealth;
+            let tempTeam = playerTeam.filter((pokemon)=>pokemon.name!== currentPlayer.name).concat(tempCurrent);
+            let temp = swapPokemon(playerTeam, attacker);
+            setCurrentPlayer(temp);
+            setPlayerTeam(tempTeam);
+            await wait (3000);
+            setPlayerHealth(currentPlayer.health);
+        }
     };
 
     //when the mode or turn change    
     useEffect(()=>{
+        if(winner){
+
+        } else {
+
         const {mode, turn} = sequence;
 
         if (mode) {
@@ -155,15 +179,15 @@ export function useBattleSequence (sequence, player, opponent) {
 
                     break;
                 };
-                case 'swap':
+                case 'swap':{
                     (async()=>{
                         setInSeq(true);
                         setAnnouncerMessage(`${attacker.name} is recalled`);
-
-                        turn === 0
+                        
+                        turn === 0 
                         ? swapPlayer(currentPlayer)
                         : swapOpponent(currentOpponent)
-                        await wait (2500);
+                        await wait (1000);
 
                         turn ===0 //swap animation
                         ? setPlayerAnimation ('specialAttack')
@@ -173,12 +197,12 @@ export function useBattleSequence (sequence, player, opponent) {
                         turn ===0 //stop animation
                         ? setPlayerAnimation ('static')
                         : setOpponentAnimation ('static');
-                        await wait (500);
-
-                        turn === 0
-                        ? setAnnouncerMessage(`${currentPlayer.name} is dispatched`)
-                        : setAnnouncerMessage(`${currentOpponent.name} is dispatched`)
-                        await wait (2500);
+                        await wait (3000);
+                        
+                        // turn === 0
+                        // ? setAnnouncerMessage(`${currentPlayer.name} is dispatched`)
+                        // : setAnnouncerMessage(`${currentOpponent.name} is dispatched`)
+                        // await wait (2500);
 
                         turn === 0
                         ? setAnnouncerMessage(`Now it is ${currentOpponent.name}'s turn`)
@@ -189,63 +213,67 @@ export function useBattleSequence (sequence, player, opponent) {
                         setInSeq(false);
                     })();
                     break;
+                }
+
                 default: {
                     break;
                 }   
             }
         }
+        }
     }, [sequence]);
-
+    
+    //to change the pokemon after the hp depletes
     useEffect(()=>{
         (async () => {
-            if (playerHealth===0){
+            if (playerHealth===0 && currentPlayer){
+                setInSeq(true)
                 if (playerTeam.length > 1){
                 await wait (2000);
                 let tempCurrent = {...currentPlayer};
-                let dispatched = await swapPokemon(playerTeam, tempCurrent)
+                let dispatched = await swapPokemon(playerTeam, tempCurrent);
                 await wait (3000);
                 setCurrentPlayer(dispatched);
                 let tempTeam = await playerTeam.filter((pokemon)=>pokemon.name!==tempCurrent.name);
-                console.log(opponentTeam);
-                console.log(playerTeam);
-                console.log(tempCurrent);
-                console.log(dispatched);
-                console.log(tempTeam);
-                setPlayerTeam(tempTeam);
+                setPlayerTeam(tempTeam); //[]
                 setPlayerHealth(dispatched.health);
                 setAnnouncerMessage(`${tempCurrent.name} is heavily injured, ${dispatched.name} is dispatched`)
-                await wait (3000);
+                await wait (4000);
                 setAnnouncerMessage(`It's ${dispatched.name}'s turn`)
+                setInSeq(false)
                 } else {
-                    await wait (2000);
+                    console.log('playerHealth === 0');
+                    setInSeq(true);
+                    await wait(1000);
                     setWinner ('opponent');
+                    setAnnouncerMessage (' ');
                 }
             }
-            if (opponentHealth===0){
+            if (opponentHealth===0 && currentOpponent){
                 if (opponentTeam.length > 1){
+                    setInSeq(true);
                 await wait (2000);
                 let tempCurrent = {...currentOpponent};
                 let dispatched = swapPokemon(opponentTeam, tempCurrent);
                 await wait (3000);
                 setCurrentOpponent(dispatched);
                 let tempTeam = opponentTeam.filter((pokemon)=>pokemon.name!==tempCurrent.name);
-                console.log(opponentTeam);
-                console.log(playerTeam);
-                console.log(tempCurrent);
-                console.log(dispatched);
-                console.log(tempTeam);
-                setOpponentTeam(tempTeam);
+                setOpponentTeam(tempTeam); //[]
                 setOpponentHealth(dispatched.health);
                 setAnnouncerMessage(`${tempCurrent.name} is heavily injured, ${dispatched.name} is dispatched`)
                 await wait (3000);
-                setAnnouncerMessage(`It's ${dispatched.name}'s turn`)
+                setAnnouncerMessage(`It's ${dispatched.name}'s turn`);
+                setInSeq(false);
                 } else {
-                    await wait (2000);
+                    setInSeq(true);
+                    await wait (1000);
                     setWinner ('player');
+                    setAnnouncerMessage (' ');
                 }
             }
         })() 
     }, [playerHealth, opponentHealth]);
+
 
     return {
         turn,

@@ -27,36 +27,3 @@ const BattleAnnouncer = ({message}) => {
 }
 
 export default BattleAnnouncer;
-
-// export default class BattleAnnouncer extends React.Component{
-//     constructor(props){
-//         super(props);
-//         this.state = {
-//             typedMessage:""}
-//     }
-
-//     componentDidMount(){
-//         this.handleType();
-//     }
-
-//     handleType = () => {
-//         const { message } = this.props;
-//         const { typedMessage } = this.state;
-
-//         if (typedMessage.length < message.length){
-//             this.setState({
-//                 typedMessage: (message.substring (0, typedMessage.length+1))
-//             });
-    
-//             setTimeout(this.handleType, 200);
-//         }  
-//     }
-
-//     render() {
-//         return (
-//             <div className={styles.main}>
-//                 <span className={styles.message}>{this.state.typedMessage} <span className={styles.cursor}/></span>
-//             </div>
-//         )
-//     }
-// }

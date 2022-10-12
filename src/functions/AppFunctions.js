@@ -34,10 +34,20 @@ export const   fetchPokemons = (playerTeam)=>{
 
 export const getRandomPokemons=()=>{
     let team = [];
+    let index = [];
 
     for (let i = 0; i < 3; i++) {
-      let index = Math.floor(Math.random()*10);
-      team.push(pokemons[index].name);
+      let number = Math.floor(Math.random()*10);
+      if(i === 0){
+        index.push (number);
+      } else {
+        while (number === index [i-1]){
+          number = Math.floor(Math.random()*10);
+        }
+        index.push(number);
+      }
+
+      team.push(pokemons[number].name);
     };
 
     return team;

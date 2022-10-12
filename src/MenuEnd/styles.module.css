@@ -1,6 +1,6 @@
 @import url('https://fonts.googleapis.com/css2?family=Press+Start+2P&display=swap');
 
-.button{
+.restart {
     border: none;
     outline: none;
     padding: 15px;
@@ -14,4 +14,19 @@
     font-family: 'Press Start 2P', cursive;
     align-items: center;
 }
+
+.main{
+    position: absolute;
+    left: 50%;
+    top: 50%;
+    transform: translate(-50%, -50%);
+    padding: 10px;
+    align-items: center;    
+}
+
+.container{
+    display: flex;
+    justify-content: center;
+}
+
 

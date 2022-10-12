@@ -6,7 +6,7 @@ import { useState } from 'react';
 
 
 const SelectPokemons = ( {username, onSelectClick}) => {
-    const [tempSelections,setTempSelections] = useState ([])
+    const [tempSelections,setTempSelections] = useState ([]);
 
     const addNewPokemon = (name) => {
         let team = [...tempSelections];

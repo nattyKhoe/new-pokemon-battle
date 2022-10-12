@@ -1,18 +1,14 @@
 import styles from './styles.module.css';
-import React from 'react';
 
-export default class ChoiceMenu extends React.Component {
-    // constructor(props){
-    //     super(props);
-    // }
 
-    render(){
-        return(
-            <div className={styles.main}>
-                <div onClick={this.props.onAttack} className={styles.option}>Attack</div>
-                <div disabled={this.props.SpecialAttack} onClick={this.props.onSpecialAttack} className={styles.option}>Special Attack</div>
-                <div onClick={this.props.onSwitch} className={styles.option}>Swap</div>
-            </div>
-        )
-    }
+const ChoiceMenu = ({onAttack, onSwitch, onSpecialAttack, inSeq}) =>{
+    return(
+        <div className={styles.main}>
+            <div onClick={inSeq ?null :onAttack} className={inSeq? styles.deactivate :styles.option}>Attack</div>
+            <div onClick={inSeq ?null :onSpecialAttack} className={inSeq? styles.deactivate :styles.option}>Special Attack</div>
+            <div onClick={inSeq ?null :onSwitch} className={inSeq? styles.deactivate :styles.option}>Swap</div>
+        </div>
+    )
 }
+     
+export default ChoiceMenu;

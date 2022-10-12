@@ -67,10 +67,12 @@ const Battle = ({onBattleEnd, player, opponent}) => {
     }
   },[turn, aiChoice, inSeq])
 
-  // useEffect(()=>{
-  //   onBattleEnd(winner);
-  //   }
-  // , [winner, onBattleEnd]);
+  useEffect(()=>{
+    if (winner.length > 0){
+      onBattleEnd(winner);
+    }
+    }
+  , [winner, onBattleEnd]);
 
     return(
     <React.Fragment>
@@ -105,20 +107,21 @@ const Battle = ({onBattleEnd, player, opponent}) => {
         <div className={styles.summary}>
           <PlayerSummary player={true} name={currentPlayer.name} maxHp={currentPlayer.maxHp} health={playerHealth}/>
         </div>
+      </div>
 
-        <div className={styles.hud}>
+      <div className={styles.hud}>
 
-          <div className={styles.hudChild}>
-            <BattleAnnouncer message={announcerMessage} />
-          </div>
-          <div className={styles.hudChild}>
-            <ChoiceMenu
-            onAttack={()=>setSequence({turn, mode:'attack'})}
-            onSwitch={()=>setSequence({turn, mode:'swap'})}
-            onSpecialAttack={() =>setSequence({turn, mode:'specialAttack'})}
-            />
-          </div>
-        </div>
+      <div className={inSeq? styles.hudMax :styles.hudChild}>
+  <BattleAnnouncer message={announcerMessage} />
+      </div>
+      <div className={inSeq? styles.invisible :styles.hudChild}>
+  <ChoiceMenu
+  inSeq = {inSeq}
+  onAttack={()=>setSequence({turn, mode:'attack'})}
+  onSwitch={()=>setSequence({turn, mode:'swap'})}
+  onSpecialAttack={() =>setSequence({turn, mode:'specialAttack'})}
+  />
+      </div>
       </div>
     </React.Fragment>  
     );

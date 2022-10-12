@@ -20,8 +20,11 @@ function App () {
   const [opponent, setOpponent] = useState ([]);
 
   const onStartClick = (name) => {
-    setAppMode('select');
-    setUsername(name);
+    if (name.length !== 0){
+      setAppMode('select');
+      setUsername(name);
+    }
+    
   }
 
   const onSelectClick = async (pokemons) => {
@@ -44,10 +47,11 @@ function App () {
     setUsername('');
     setPlayer('');
     setOpponent('');
+    setWinner('');
   }
 
   return (
-    <div className={styles.main}>
+    <div className={winner === "opponent" ?styles.lost :styles.main}>
       
       {appMode === "start" && (<Start onStartClick={onStartClick}/>)}
 
@@ -57,65 +61,9 @@ function App () {
       
       {appMode === "battle" && (<Battle onBattleEnd={onBattleEnd} player={player} opponent={opponent}/>)}
 
-      {/* {appMode === "end" && (<End winner={winner==="player" ? username : "opponent"} onEndClick={onEndClick}/>)} */}
+      {appMode === "end" && (<End winner={winner==="player" ? username : "opponent"} onEndClick={onEndClick}/>)}
     </div>
   );
   };
-// class App extends React.Component {
-//   constructor(){
-//     super()
-//     this.state = {
-//       mode: "start",
-//       username: "",
-//       player:[],
-//       opponent:[],
-//     }
-//   };
-
-//   onStartClick = (name) => {
-//     this.setState({
-//       mode: "select",
-//       username: name
-//     })
-//   }
-
-//   onSelectClick = (pokemons) => {
-//     if (pokemons.length === 3){
-//       this.setState({
-//         mode:"battle",
-//         player: fetchingPokemonTeam ("player", pokemons),
-//         opponent:fetchingPokemonTeam ("opponent", pokemons)
-//       });
-//     } else {
-//       console.log("Please select three Pokemons")
-//     }
-//   }
-
-//   onBattleClick =() => {
-//     this.setState({mode:"end"})
-//   }
-
-//   onEndClick = () => {
-//     this.setState( {
-//       mode: "start",
-//       username: "",
-//       selectedPokemons: []
-//     })
-//   }
-//   render(){
-//   return (
-//     <div className={styles.main}>
-      
-//       {this.state.mode === "start" && (<Start onStartClick={this.onStartClick}/>)}
-
-//       {this.state.mode === "select" && (<SelectPokemons username={this.state.username} onSelectClick={this.onSelectClick}/>)}
-//       {/* {this.state.mode === "battle" && console.log(this.state)} */}
-      
-//       {this.state.mode === "battle" && (<Battle onBattleClick={this.onBattleClick} player={this.state.player} opponent={this.state.opponent}/>)}
-     
-//     </div>
-//   );
-//   };
-// }
 
 export default App;
